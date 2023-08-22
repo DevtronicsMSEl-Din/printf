@@ -1,61 +1,55 @@
-#include "printf.h"
+#include "main.h"
 
 /**
- * _printf - function format output to standard output
- * @format: string
- * @...: variable
- * characters got printed
+ * _printf - Prints output according to a format string
+ * @format: A pointer to the format string 
+ * @...: arguments to the format specifiers
+ *
+ * Return: The number of characters printed 
  */
+ 
 int _printf(const char *format, ...)
 {
-	va_list args;
-	/*Keeps track of the number of characters printed*/ 
-	int char_count = 0; 
+    va_list args;
+    va_start(args, format);
+    int count = 0;
 
-	va_start(args, format);
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
-		return (-1);
+    for (int i = 0; format[i] != '\0'; i++)
+    {
+        if (format[i] != '%')
+        {
+            write(1, &format[i], 1);
+            count++;
+        }
+        else
+        {
+            i++;
+            
+            if (format[i] == 'c')
+            {
+                char c = (char) va_arg(args, int);
+                write(1, &c, 1);
+                count++;
+            }
+            else if (format[i] == 's')
+            {
+                char *str = va_arg(args, char *);
+                while (*str)
+                {
+                    write(1, str, 1);
+                    str++;
+                    count++;
+                }
+            }
+            else if (format[i] == '%') 
+            {
+                write(1, "%", 1);
+                count++;
+            }
 
-	while (*format != '\0')
-	{
-		if (*format == '%')
-		{
-			format++;
-			if (*format == 'c')
-			/*Print a character argument*/
-				char_count = char_arg(args, char_count); 
-            /*Print a string argument*/
-			else if (*format == 's')
-				char_count = string_arg(args, char_count); 
-            /*Print a percent character*/
-			else if (*format == '%')
-				char_count = percent(char_count); 
-            /*Print an integer argument*/
-			else if (*format == 'd' || *format == 'i')
-				char_count = int_arg(args, char_count); 
-            /*Print a binary argument*/
-			else if (*format == 'b')
-				char_count = binary_arg(args, char_count);
-			else
-			{
-				_putchar('%');
-				_putchar(*format);
-				char_count += 2;
-			}
-		}
-		else
-			char_count += _putchar(*format);
-
-		format++;
-	}
-	va_end(args);
-
-	return (char_count);
+        }
+    }
+    
+    va_end(args);
+    return count;
 }
-
-/*
-int  main(void)
-{
-	return(0);
-}
-*/
