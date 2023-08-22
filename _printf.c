@@ -9,8 +9,8 @@
 int _printf(const char *format, ...)
 {
 	va_list args;
+	/*Keeps track of the number of characters printed*/ 
 	int char_count = 0; 
-	// Keeps track of the number of characters printed
 
 	va_start(args, format);
 	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
@@ -22,20 +22,20 @@ int _printf(const char *format, ...)
 		{
 			format++;
 			if (*format == 'c')
+			/*Print a character argument*/
 				char_count = char_arg(args, char_count); 
-                // Print a character argument
+            /*Print a string argument*/
 			else if (*format == 's')
 				char_count = string_arg(args, char_count); 
-                // Print a string argument
+            /*Print a percent character*/
 			else if (*format == '%')
 				char_count = percent(char_count); 
-                // Print a percent character
+            /*Print an integer argument*/
 			else if (*format == 'd' || *format == 'i')
 				char_count = int_arg(args, char_count); 
-                // Print an integer argument
+            /*Print a binary argument*/
 			else if (*format == 'b')
 				char_count = binary_arg(args, char_count);
-                // Print a binary argument
 			else
 			{
 				_putchar('%');
@@ -52,3 +52,10 @@ int _printf(const char *format, ...)
 
 	return (char_count);
 }
+
+/*
+int  main(void)
+{
+	return(0);
+}
+*/

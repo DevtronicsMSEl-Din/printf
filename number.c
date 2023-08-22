@@ -1,3 +1,5 @@
+#include "printf.h"
+
 /**
  * hexa - unsigned integer hexadecimal to standard output
  * @args: variable argument
